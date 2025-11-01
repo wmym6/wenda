@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>在线问答系统 - 登录</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --text-color: #333;
+        --danger: #e63946;
+        --success: #4cc9f0;
+        --white: #fff;
+        --gray-light: #f5f5f5;
+        --gray: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #4361ee 0%, #3f37c9 50%);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 20px 0;
+      }
+
+      .home-link {
+        color: var(--white);
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .home-link i {
+        margin-right: 8px;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+      }
+
+      .auth-container {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 450px;
+        overflow: hidden;
+      }
+
+      .auth-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--gray);
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 16px;
+        background: none;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-color);
+        cursor: pointer;
+      }
+
+      .tab-btn.active {
+        color: var(--primary-color);
+        border-bottom: 3px solid var(--primary-color);
+      }
+
+      .auth-content {
+        padding: 30px;
+      }
+
+      .logo-container {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        max-width: 160px;
+        height: auto;
+        border-radius: 50%;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      .role-selector {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: var(--gray-light);
+        border-radius: 6px;
+      }
+
+      .role-select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--gray);
+        border-radius: 4px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        background-color: var(--primary-color);
+        color: var(--white);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .btn:disabled {
+        background-color: var(--gray);
+        cursor: not-allowed;
+      }
+
+      .form-message {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .error-message {
+        background-color: rgba(230, 57, 70, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(230, 57, 70, 0.2);
+        display: block;
+      }
+
+      .success-message {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(76, 201, 240, 0.2);
+        display: block;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      footer {
+        padding: 20px 0;
+        text-align: center;
+        color: var(--white);
+        opacity: 0.8;
+        font-size: 14px;
+      }
+
+      /* 加载状态样式 */
+      .loading {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="zhuye.html" class="home-link">
+          <i class="fas fa-home"></i> 返回主页
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="auth-container">
+        <div class="auth-tabs">
+          <button class="tab-btn active" data-tab="login">登录</button>
+          <button class="tab-btn" data-tab="register">注册</button>
+        </div>
+
+        <div class="auth-content">
+          <div class="logo-container">
+            <img src="logo.png" alt="在线问答系统" class="logo" />
+          </div>
+
+          <!-- 登录表单 -->
+          <div class="tab-content active" id="login-tab">
+            <div class="role-selector">
+              <label for="login-role">登录身份:</label>
+              <select id="login-role" class="role-select">
+                <option value="user">普通用户</option>
+                <option value="admin">管理员</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="login-username" class="form-label">用户名</label>
+              <input
+                type="text"
+                id="login-username"
+                class="form-input"
+                required
+                placeholder="请输入用户名"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="login-password" class="form-label">密码</label>
+              <input
+                type="password"
+                id="login-password"
+                class="form-input"
+                required
+                placeholder="请输入密码"
+              />
+            </div>
+
+            <button id="login-btn" class="btn">
+              <span id="login-btn-text">登录</span>
+              <span
+                id="login-loading"
+                class="loading"
+                style="display: none"
+              ></span>
+            </button>
+            <div id="login-message" class="form-message"></div>
+          </div>
+
+          <!-- 注册表单 -->
+          <div class="tab-content" id="register-tab">
+            <div class="role-selector">
+              <label for="register-role">注册身份:</label>
+              <select id="register-role" class="role-select">
+                <option value="user">普通用户</option>
+                <option value="admin">管理员</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="register-username" class="form-label">用户名</label>
+              <input
+                type="text"
+                id="register-username"
+                class="form-input"
+                required
+                placeholder="请设置用户名"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="register-password" class="form-label">密码</label>
+              <input
+                type="password"
+                id="register-password"
+                class="form-input"
+                required
+                placeholder="请设置密码（至少6位）"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="confirm-password" class="form-label">确认密码</label>
+              <input
+                type="password"
+                id="confirm-password"
+                class="form-input"
+                required
+                placeholder="请再次输入密码"
+              />
+            </div>
+
+            <button id="register-btn" class="btn">
+              <span id="register-btn-text">注册</span>
+              <span
+                id="register-loading"
+                class="loading"
+                style="display: none"
+              ></span>
+            </button>
+            <div id="register-message" class="form-message"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>© 2025 在线问答系统 - 版权所有</p>
+      </div>
+    </footer>
+
+    <script>
+      // 切换表单
+      document.querySelectorAll(".tab-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((tab) => tab.classList.remove("active"));
+
+          button.classList.add("active");
+          const targetTab = document.getElementById(
+            button.getAttribute("data-tab") + "-tab"
+          );
+          targetTab.classList.add("active");
+
+          document
+            .getElementById("login-message")
+            .classList.remove("error-message", "success-message");
+          document
+            .getElementById("register-message")
+            .classList.remove("error-message", "success-message");
+        });
+      });
+
+      // 显示/隐藏加载状态
+      function setLoadingState(btnId, isLoading) {
+        const btn = document.getElementById(btnId);
+        const btnText = document.getElementById(`${btnId}-text`);
+        const loadingIcon = document.getElementById(`${btnId}-loading`);
+
+        if (!btn || !btnText || !loadingIcon) {
+          console.error(
+            `未找到元素：${btnId} 或 ${btnId}-text 或 ${btnId}-loading`
+          );
+          return;
+        }
+
+        btn.disabled = isLoading;
+        btnText.style.display = isLoading ? "none" : "inline";
+        loadingIcon.style.display = isLoading ? "inline-block" : "none";
+      }
+
+      // 显示消息提示
+      function showMessage(elementId, text, type) {
+        const element = document.getElementById(elementId);
+        element.textContent = text;
+        element.className = "form-message";
+        element.classList.add(
+          type === "error" ? "error-message" : "success-message"
+        );
+      }
+
+      // 登录功能 - 优化登录状态存储和跨域兼容
+      document
+        .getElementById("login-btn")
+        .addEventListener("click", async () => {
+          const username = document
+            .getElementById("login-username")
+            .value.trim();
+          const password = document.getElementById("login-password").value;
+          const role = document.getElementById("login-role").value;
+          const messageId = "login-message";
+
+          if (!username)
+            return showMessage(messageId, "用户名不能为空", "error");
+          if (!password) return showMessage(messageId, "密码不能为空", "error");
+
+          setLoadingState("login-btn", true);
+
+          try {
+            const response = await fetch("http://localhost:3000/api/login", {
+              method: "POST",
+              mode: "cors",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password, role }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showMessage(messageId, "登录成功，正在跳转...", "success");
+              // 存储完整用户信息（包含user_id和role）
+              localStorage.setItem("user", JSON.stringify(result.user));
+              setTimeout(() => {
+                window.location.href = "zhuye.html";
+              }, 1500);
+            } else {
+              showMessage(messageId, result.message || "登录失败", "error");
+            }
+          } catch (error) {
+            console.error("登录错误:", error);
+            showMessage(
+              messageId,
+              "连接服务器失败，请检查后端是否启动",
+              "error"
+            );
+          } finally {
+            setLoadingState("login-btn", false);
+          }
+        });
+
+      // 注册功能
+      document
+        .getElementById("register-btn")
+        .addEventListener("click", async () => {
+          const username = document
+            .getElementById("register-username")
+            .value.trim();
+          const password = document.getElementById("register-password").value;
+          const confirmPwd = document.getElementById("confirm-password").value;
+          const role = document.getElementById("register-role").value;
+          const messageId = "register-message";
+
+          if (!username)
+            return showMessage(messageId, "用户名不能为空", "error");
+          if (password.length < 6)
+            return showMessage(messageId, "密码长度不能少于6位", "error");
+          if (password !== confirmPwd)
+            return showMessage(messageId, "两次密码不一致", "error");
+
+          setLoadingState("register-btn", true);
+
+          try {
+            const response = await fetch("http://localhost:3000/api/register", {
+              method: "POST",
+              mode: "cors",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password, role }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showMessage(
+                messageId,
+                "注册成功，即将跳转到登录页...",
+                "success"
+              );
+              document.getElementById("register-username").value = "";
+              document.getElementById("register-password").value = "";
+              document.getElementById("confirm-password").value = "";
+              setTimeout(() => {
+                document.querySelector('.tab-btn[data-tab="login"]').click();
+              }, 2000);
+            } else {
+              showMessage(messageId, result.message || "注册失败", "error");
+            }
+          } catch (error) {
+            console.error("注册错误:", error);
+            showMessage(
+              messageId,
+              "连接服务器失败，请检查后端是否启动",
+              "error"
+            );
+          } finally {
+            setLoadingState("register-btn", false);
+          }
+        });
+
+      // 回车键提交
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          const activeTab = document
+            .getElementById("login-tab")
+            .classList.contains("active")
+            ? "login-btn"
+            : "register-btn";
+          document.getElementById(activeTab).click();
+        }
+      });
+
+      // 页面加载验证
+      window.addEventListener("load", () => {
+        if (window.location.protocol === "file:") {
+          showMessage(
+            "login-message",
+            "请通过 http://localhost:3000/login.html 访问，避免跨域问题",
+            "error"
+          );
+          showMessage(
+            "register-message",
+            "请通过 http://localhost:3000/login.html 访问，避免跨域问题",
+            "error"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

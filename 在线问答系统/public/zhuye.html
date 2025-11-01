@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>在线问答系统 - 主页</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --text-color: #333;
+        --danger: #e63946;
+        --success: #4cc9f0;
+        --white: #fff;
+        --gray-light: #f5f5f5;
+        --gray: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #4361ee 0%, #3f37c9 50%);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 20px 0;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        max-width: 80px;
+        height: auto;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      .auth-links {
+        display: flex;
+        gap: 10px;
+      }
+
+      .auth-links a {
+        color: var(--white);
+        background-color: var(--primary-color);
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+
+      .auth-links a:hover {
+        background-color: var(--secondary-color);
+      }
+
+      main {
+        flex: 1;
+        padding: 40px 0;
+      }
+
+      .main-content {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 30px;
+      }
+
+      .post-list {
+        margin-bottom: 30px;
+      }
+
+      .post-card {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .post-title {
+        display: block;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--primary-color);
+        text-decoration: none;
+        margin-bottom: 10px;
+        transition: color 0.3s;
+      }
+
+      .post-title:hover {
+        color: var(--secondary-color);
+      }
+
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .pagination button {
+        padding: 8px 16px;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+        background-color: var(--white);
+        color: var(--text-color);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .pagination button:hover {
+        background-color: var(--gray-light);
+      }
+
+      .pagination button.active,
+      .pagination button:disabled:hover {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border-color: var(--primary-color);
+        cursor: default;
+      }
+
+      .page-numbers {
+        display: flex;
+        gap: 5px;
+      }
+
+      .page-jump {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .page-jump input {
+        width: 50px;
+        padding: 8px;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        text-align: center;
+        color: var(--danger);
+        padding: 20px;
+        display: none;
+      }
+
+      /* 新增：删除按钮样式 */
+      .delete-btn {
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--danger);
+        color: var(--white);
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .delete-btn:hover {
+        background-color: #d62828;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <a href="zhuye.html">
+          <img src="logo.png" alt="在线问答系统" class="logo" />
+        </a>
+        <div class="nav-links">
+          <a href="zhuye.html"><i class="fas fa-home"></i> 首页</a>
+          <a href="publish.html"><i class="fas fa-pen"></i> 发布问题</a>
+          <a href="profile.html"><i class="fas fa-user"></i> 个人中心</a>
+        </div>
+        <!-- 登录状态判断：未登录显示登录/注册，已登录显示用户名和头像 -->
+        <div id="auth-section">
+          <!-- 未登录状态（默认） -->
+          <div class="auth-links" id="guest-links">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> 登录</a>
+            <a href="register.html"><i class="fas fa-user-plus"></i> 注册</a>
+          </div>
+          <!-- 已登录状态（动态显示） -->
+          <div class="user-info" id="user-links" style="display: none">
+            <div
+              class="user-avatar"
+              style="
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: var(--primary-color);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+              "
+            >
+              <!-- 用户名首字母 -->
+            </div>
+            <span style="margin-left: 10px; font-weight: 500">
+              <!-- 用户名 -->
+            </span>
+            <button
+              id="logout-btn"
+              style="
+                margin-left: 10px;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                background-color: var(--danger);
+                color: white;
+                cursor: pointer;
+              "
+            >
+              退出
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="main-content">
+          <h2 style="margin-bottom: 20px">最新问答</h2>
+          <div class="loading" id="loading"></div>
+          <div class="error-message" id="errorMessage"></div>
+          <div class="post-list" id="postList">
+            <!-- 帖子列表将通过JavaScript动态生成 -->
+          </div>
+
+          <div class="pagination">
+            <button id="prevBtn" disabled>
+              <i class="fas fa-chevron-left"></i> 上一页
+            </button>
+
+            <div class="page-numbers" id="pageNumbers">
+              <!-- 页码将通过JavaScript动态生成 -->
+            </div>
+
+            <button id="nextBtn">
+              <i class="fas fa-chevron-right"></i> 下一页
+            </button>
+
+            <div class="page-jump">
+              <span>跳转到</span>
+              <input type="number" id="pageInput" min="1" value="1" />
+              <button id="jumpBtn">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // 分页相关变量
+      const postsPerPage = 5;
+      let currentPage = 1;
+      let totalPages = 1;
+      let posts = [];
+      // 新增：当前登录用户信息
+      let currentUser = null;
+
+      // DOM元素
+      const postList = document.getElementById("postList");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const pageNumbers = document.getElementById("pageNumbers");
+      const pageInput = document.getElementById("pageInput");
+      const jumpBtn = document.getElementById("jumpBtn");
+      const loading = document.getElementById("loading");
+      const errorMessage = document.getElementById("errorMessage");
+
+      // 页面加载时检查登录状态（新增：保存当前用户信息）
+      window.addEventListener("load", () => {
+        const userStr = localStorage.getItem("user");
+        const guestLinks = document.getElementById("guest-links");
+        const userLinks = document.getElementById("user-links");
+        const userAvatar = userLinks.querySelector(".user-avatar");
+        const userName = userLinks.querySelector("span");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        if (userStr) {
+          currentUser = JSON.parse(userStr);
+          guestLinks.style.display = "none";
+          userLinks.style.display = "flex";
+          userLinks.style.alignItems = "center";
+          userAvatar.textContent = currentUser.username.charAt(0);
+          userName.textContent = currentUser.username;
+
+          // 退出登录
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+          });
+        } else {
+          guestLinks.style.display = "flex";
+          userLinks.style.display = "none";
+        }
+      });
+
+      // 初始化页面（新增：渲染帖子后控制删除按钮显示）
+      async function initPage() {
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          // 从后端API获取帖子数据
+          const response = await fetch(
+            `http://localhost:3000/api/posts?page=1&limit=${postsPerPage}`,
+            {
+              method: "GET",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const result = await response.json();
+
+          if (response.ok) {
+            posts = result.data.posts;
+            totalPages = result.data.pagination.totalPages;
+            renderPosts();
+            renderPageNumbers();
+            updatePaginationButtons();
+            // 新增：控制删除按钮显示
+            if (currentUser) showPostDeleteButtons();
+          } else {
+            throw new Error(result.message || "获取帖子数据失败");
+          }
+        } catch (error) {
+          console.error("初始化帖子列表错误:", error);
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 渲染帖子列表（新增：添加删除按钮DOM）
+      function renderPosts() {
+        postList.innerHTML = "";
+
+        if (posts.length === 0) {
+          postList.innerHTML =
+            "<p style='text-align: center; padding: 20px;'>暂无帖子，快去发布第一条问答吧！</p>";
+          return;
+        }
+
+        posts.forEach((post, index) => {
+          const postElement = document.createElement("div");
+          postElement.className = "post-card";
+          postElement.setAttribute("data-postid", post.post_id);
+          postElement.setAttribute("data-authorid", post.author.user_id);
+
+          postElement.innerHTML = `
+          <div class="post-header">
+            <div class="post-author">
+              <i class="fas fa-user"></i> 发布者: ${
+                post.author.username || "匿名用户"
+              }
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="post-date">
+                <i class="fas fa-clock"></i> ${new Date(
+                  post.created_at
+                ).toLocaleString()}
+              </div>
+              <!-- 新增：帖子删除按钮（默认隐藏） -->
+              <button class="delete-btn post-delete-btn" data-postid="${
+                post.post_id
+              }" style="display: none;">
+                <i class="fas fa-trash-alt"></i> 删除
+              </button>
+            </div>
+          </div>
+          <a href="post-detail.html?postId=${post.post_id}" class="post-title">
+            ${post.title}
+          </a>
+          <div class="post-excerpt" style="margin-top: 10px; color: #666;">
+            ${
+              post.content.length > 120
+                ? post.content.substring(0, 120) + "..."
+                : post.content
+            }
+          </div>
+        `;
+
+          postList.appendChild(postElement);
+
+          if (index < posts.length - 1) {
+            const divider = document.createElement("hr");
+            divider.style.border = "none";
+            divider.style.borderTop = "1px solid var(--gray-light)";
+            divider.style.margin = "20px 0";
+            postList.appendChild(divider);
+          }
+        });
+      }
+
+      // 渲染页码（智能分页逻辑）
+      function renderPageNumbers() {
+        pageNumbers.innerHTML = "";
+
+        if (totalPages <= 10) {
+          for (let i = 1; i <= totalPages; i++) {
+            createPageButton(i);
+          }
+          return;
+        }
+
+        let pagesToShow = [];
+        pagesToShow.push(1);
+
+        const startPage = Math.max(2, currentPage - 2);
+        const endPage = Math.min(totalPages - 1, currentPage + 2);
+
+        if (startPage > 2) {
+          pagesToShow.push("...");
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          pagesToShow.push(i);
+        }
+
+        if (endPage < totalPages - 1) {
+          pagesToShow.push("...");
+        }
+
+        if (totalPages > 1) {
+          pagesToShow.push(totalPages);
+        }
+
+        pagesToShow.forEach((page) => {
+          if (page === "...") {
+            const ellipsis = document.createElement("div");
+            ellipsis.className = "page-ellipsis";
+            ellipsis.textContent = "...";
+            pageNumbers.appendChild(ellipsis);
+          } else {
+            createPageButton(page);
+          }
+        });
+      }
+
+      // 创建页码按钮
+      function createPageButton(page) {
+        const pageButton = document.createElement("button");
+        pageButton.textContent = page;
+        pageButton.className = page === currentPage ? "active" : "";
+        pageButton.addEventListener("click", () => goToPage(page));
+        pageNumbers.appendChild(pageButton);
+      }
+
+      // 更新分页按钮状态
+      function updatePaginationButtons() {
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+        pageInput.value = currentPage;
+      }
+
+      // 跳转到指定页面（新增：跳转后控制删除按钮显示）
+      async function goToPage(page) {
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          const response = await fetch(
+            `http://localhost:3000/api/posts?page=${page}&limit=${postsPerPage}`,
+            {
+              method: "GET",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const result = await response.json();
+
+          if (response.ok) {
+            posts = result.data.posts;
+            totalPages = result.data.pagination.totalPages;
+            renderPosts();
+            renderPageNumbers();
+            updatePaginationButtons();
+            // 新增：控制删除按钮显示
+            if (currentUser) showPostDeleteButtons();
+          } else {
+            throw new Error(result.message || "获取帖子数据失败");
+          }
+        } catch (error) {
+          console.error(`跳转到第${page}页错误:", error`);
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 新增：控制帖子删除按钮显示（权限判断）
+      function showPostDeleteButtons() {
+        const deleteButtons = document.querySelectorAll(".post-delete-btn");
+        deleteButtons.forEach((btn) => {
+          const postId = btn.getAttribute("data-postid");
+          const targetPost = posts.find((post) => post.post_id == postId);
+          if (!targetPost) return;
+
+          // 权限规则：管理员 或 帖子发布者是当前用户
+          const hasPermission =
+            currentUser.role === "admin" ||
+            targetPost.author.user_id == currentUser.user_id;
+          if (hasPermission) {
+            btn.style.display = "flex";
+            btn.addEventListener("click", () => handleDeletePost(postId));
+          }
+        });
+      }
+
+      // 新增：执行删除帖子
+      async function handleDeletePost(postId) {
+        if (
+          !confirm(
+            "确定删除该帖子？删除后将同时删除所有关联评论，操作不可恢复！"
+          )
+        ) {
+          return;
+        }
+
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          const response = await fetch(
+            `http://localhost:3000/api/posts/${postId}`,
+            {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ operator_id: currentUser.user_id }),
+            }
+          );
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            alert(result.message);
+            // 重新加载当前页
+            goToPage(currentPage);
+          } else {
+            throw new Error(result.message || "删除失败");
+          }
+        } catch (error) {
+          console.error("删除帖子错误:", error);
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 事件监听
+      prevBtn.addEventListener("click", () => goToPage(currentPage - 1));
+      nextBtn.addEventListener("click", () => goToPage(currentPage + 1));
+      jumpBtn.addEventListener("click", () => {
+        const page = parseInt(pageInput.value);
+        if (!isNaN(page) && page >= 1 && page <= totalPages) {
+          goToPage(page);
+        } else {
+          alert(`请输入有效的页码 (1-${totalPages})`);
+        }
+      });
+
+      // 初始化页面
+      initPage();
+    </script>
+  </body>
+</html>

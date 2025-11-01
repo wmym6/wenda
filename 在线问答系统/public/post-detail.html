@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>在线问答系统 - 问题详情</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --text-color: #333;
+        --danger: #e63946;
+        --success: #4cc9f0;
+        --white: #fff;
+        --gray-light: #f5f5f5;
+        --gray: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #4361ee 0%, #3f37c9 50%);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 20px 0;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        max-width: 80px;
+        height: auto;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      .auth-links {
+        display: flex;
+        gap: 10px;
+      }
+
+      .auth-links a {
+        color: var(--white);
+        background-color: var(--primary-color);
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+
+      .auth-links a:hover {
+        background-color: var(--secondary-color);
+      }
+
+      main {
+        flex: 1;
+        padding: 40px 0;
+      }
+
+      .main-content {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 30px;
+      }
+
+      .post-detail {
+        margin-bottom: 40px;
+      }
+
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .post-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .author-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--gray-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .author-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .author-name {
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .post-date {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .post-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--primary-color);
+      }
+
+      .post-content {
+        line-height: 1.8;
+        margin-bottom: 30px;
+        white-space: pre-line;
+      }
+
+      .comments-section {
+        margin-top: 40px;
+      }
+
+      .comments-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .comment-list {
+        margin-bottom: 30px;
+      }
+
+      .comment-card {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .comment-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .comment-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: var(--gray-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .comment-author-name {
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .comment-content {
+        line-height: 1.6;
+      }
+
+      .comment-form {
+        margin-top: 30px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .form-textarea {
+        height: 120px;
+        resize: vertical;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 6px;
+        background-color: var(--primary-color);
+        color: var(--white);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-message {
+        text-align: center;
+        color: var(--danger);
+        padding: 20px;
+        display: none;
+      }
+
+      /* 新增：删除按钮样式 */
+      .delete-btn {
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--danger);
+        color: var(--white);
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .delete-btn:hover {
+        background-color: #d62828;
+      }
+
+      /* 新增：评论消息提示样式 */
+      .comment-message {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .comment-error {
+        background-color: rgba(230, 57, 70, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(230, 57, 70, 0.2);
+      }
+
+      .comment-success {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(76, 201, 240, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <a href="zhuye.html">
+          <img src="logo.png" alt="在线问答系统" class="logo" />
+        </a>
+        <div class="nav-links">
+          <a href="zhuye.html"><i class="fas fa-home"></i> 首页</a>
+          <a href="publish.html"><i class="fas fa-pen"></i> 发布问题</a>
+          <a href="profile.html"><i class="fas fa-user"></i> 个人中心</a>
+        </div>
+        <!-- 登录状态判断：未登录显示登录/注册，已登录显示用户名和头像 -->
+        <div id="auth-section">
+          <!-- 未登录状态（默认） -->
+          <div class="auth-links" id="guest-links">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> 登录</a>
+            <a href="register.html"><i class="fas fa-user-plus"></i> 注册</a>
+          </div>
+          <!-- 已登录状态（动态显示） -->
+          <div class="user-info" id="user-links" style="display: none">
+            <div
+              class="user-avatar"
+              style="
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: var(--primary-color);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+              "
+            >
+              <!-- 用户名首字母 -->
+            </div>
+            <span style="margin-left: 10px; font-weight: 500">
+              <!-- 用户名 -->
+            </span>
+            <button
+              id="logout-btn"
+              style="
+                margin-left: 10px;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                background-color: var(--danger);
+                color: white;
+                cursor: pointer;
+              "
+            >
+              退出
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="main-content">
+          <div class="loading" id="loading"></div>
+          <div class="error-message" id="errorMessage"></div>
+          <div class="post-detail" id="postDetail">
+            <!-- 帖子详情将通过JavaScript动态生成 -->
+          </div>
+
+          <div class="comments-section">
+            <div class="comments-title">
+              <i class="fas fa-comments"></i> 评论区
+            </div>
+            <div class="comment-list" id="commentList">
+              <!-- 评论列表将通过JavaScript动态生成 -->
+            </div>
+
+            <!-- 评论发布按钮修改后 -->
+            <div class="comment-form">
+              <form id="commentForm">
+                <div class="form-group">
+                  <label for="commentContent" class="form-label"
+                    >发表评论</label
+                  >
+                  <textarea
+                    id="commentContent"
+                    class="form-input form-textarea"
+                    placeholder="请输入你的评论..."
+                    required
+                  ></textarea>
+                </div>
+                <!-- 新增加载图标和文本容器 -->
+                <button type="submit" class="btn" id="comment-btn">
+                  <span class="btn-text">发布评论</span>
+                  <span class="loading" style="display: none"></span>
+                </button>
+                <!-- 评论专用消息提示（避免与帖子加载提示混淆） -->
+                <div id="comment-message" class="comment-message"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // 获取URL中的帖子ID
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get("postId");
+      if (!postId) {
+        document.getElementById("errorMessage").textContent =
+          "未找到帖子ID，请从主页进入";
+        document.getElementById("errorMessage").style.display = "block";
+      }
+
+      // DOM元素
+      const postDetail = document.getElementById("postDetail");
+      const commentList = document.getElementById("commentList");
+      const commentForm = document.getElementById("commentForm");
+      const commentContent = document.getElementById("commentContent");
+      const loading = document.getElementById("loading");
+      const errorMessage = document.getElementById("errorMessage");
+      const commentMessage = document.getElementById("comment-message");
+
+      // 新增：全局变量
+      let currentUser = null; // 当前登录用户
+      let currentPost = null; // 当前帖子信息
+      let comments = []; // 评论列表
+
+      // 页面加载时检查登录状态（新增：保存当前用户信息）
+      window.addEventListener("load", () => {
+        const userStr = localStorage.getItem("user");
+        const guestLinks = document.getElementById("guest-links");
+        const userLinks = document.getElementById("user-links");
+        const userAvatar = userLinks.querySelector(".user-avatar");
+        const userName = userLinks.querySelector("span");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        if (userStr) {
+          currentUser = JSON.parse(userStr);
+          guestLinks.style.display = "none";
+          userLinks.style.display = "flex";
+          userLinks.style.alignItems = "center";
+          userAvatar.textContent = currentUser.username.charAt(0);
+          userName.textContent = currentUser.username;
+
+          // 退出登录
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+          });
+        } else {
+          guestLinks.style.display = "flex";
+          userLinks.style.display = "none";
+          // 未登录：隐藏评论表单
+          document.getElementById("commentForm").innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #666;">
+              <i class="fas fa-lock"></i> 请<a href="login.html" style="color: var(--primary-color);">登录</a>后发表评论
+            </div>
+          `;
+        }
+      });
+
+      // 初始化页面（新增：渲染后控制删除按钮显示）
+      async function initPage() {
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          // 并行获取帖子详情和评论
+          const [postRes, commentRes] = await Promise.all([
+            fetch(`http://localhost:3000/api/posts/${postId}`),
+            fetch(`http://localhost:3000/api/comments?postId=${postId}`),
+          ]);
+
+          // 处理帖子详情
+          const postData = await postRes.json();
+          if (!postRes.ok)
+            throw new Error(postData.message || "获取帖子详情失败");
+          currentPost = postData.data.post;
+          renderPostDetail(currentPost);
+
+          // 处理评论列表
+          const commentData = await commentRes.json();
+          if (!commentRes.ok)
+            throw new Error(commentData.message || "获取评论列表失败");
+          comments = commentData.data.comments;
+          renderCommentList(comments);
+
+          // 新增：控制删除按钮显示
+          if (currentUser) {
+            showPostDeleteButton();
+            showCommentDeleteButtons();
+          }
+        } catch (error) {
+          console.error("初始化页面错误:", error);
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 渲染帖子详情（新增：添加帖子删除按钮）
+      function renderPostDetail(post) {
+        postDetail.innerHTML = `
+        <div class="post-header">
+          <div class="post-author">
+            <div class="author-avatar">${post.author.username.charAt(0)}</div>
+            <div class="author-info">
+              <div class="author-name">${post.author.username}</div>
+              <div class="post-date">发布时间：${new Date(
+                post.created_at
+              ).toLocaleString()}</div>
+            </div>
+          </div>
+          <!-- 新增：帖子删除按钮（默认隐藏） -->
+          <button class="delete-btn post-delete-btn" data-postid="${
+            post.post_id
+          }" style="display: none;">
+            <i class="fas fa-trash-alt"></i> 删除
+          </button>
+        </div>
+        <h2 class="post-title">${post.title}</h2>
+        <div class="post-content">${post.content}</div>
+      `;
+      }
+
+      // 渲染评论列表（新增：添加评论删除按钮）
+      function renderCommentList(comments) {
+        commentList.innerHTML = "";
+
+        if (comments.length === 0) {
+          commentList.innerHTML =
+            "<p style='text-align: center; color: #666;'>暂无评论，快来发布第一条评论吧！</p>";
+          return;
+        }
+
+        comments.forEach((comment, index) => {
+          const commentCard = document.createElement("div");
+          commentCard.className = "comment-card";
+          commentCard.setAttribute("data-commentid", comment.comment_id);
+          commentCard.setAttribute("data-authorid", comment.author.user_id);
+
+          commentCard.innerHTML = `
+          <div class="comment-header">
+            <div class="comment-author">
+              <div class="comment-avatar">${comment.author.username.charAt(
+                0
+              )}</div>
+              <div class="comment-author-name">${comment.author.username}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="comment-date">${new Date(
+                comment.created_at
+              ).toLocaleString()}</div>
+              <!-- 新增：评论删除按钮（默认隐藏） -->
+              <button class="delete-btn comment-delete-btn" data-commentid="${
+                comment.comment_id
+              }" style="display: none;">
+                <i class="fas fa-trash-alt"></i> 删除
+              </button>
+            </div>
+          </div>
+          <div class="comment-content">${comment.content}</div>
+        `;
+
+          commentList.appendChild(commentCard);
+
+          if (index < comments.length - 1) {
+            const divider = document.createElement("hr");
+            divider.style.border = "none";
+            divider.style.borderTop = "1px solid var(--gray-light)";
+            divider.style.margin = "20px 0";
+            commentList.appendChild(divider);
+          }
+        });
+      }
+
+      // 新增：控制帖子删除按钮显示
+      function showPostDeleteButton() {
+        if (!currentPost) return;
+        const postDeleteBtn = document.querySelector(".post-delete-btn");
+        if (!postDeleteBtn) return;
+
+        // 权限规则：管理员 或 帖子发布者
+        const hasPermission =
+          currentUser.role === "admin" ||
+          currentPost.author.user_id == currentUser.user_id;
+        if (hasPermission) {
+          postDeleteBtn.style.display = "flex";
+          postDeleteBtn.addEventListener("click", () =>
+            handleDeletePost(currentPost.post_id)
+          );
+        }
+      }
+
+      // 新增：控制评论删除按钮显示
+      function showCommentDeleteButtons() {
+        const commentDeleteBtns = document.querySelectorAll(
+          ".comment-delete-btn"
+        );
+        commentDeleteBtns.forEach((btn) => {
+          const commentId = btn.getAttribute("data-commentid");
+          const targetComment = comments.find(
+            (comment) => comment.comment_id == commentId
+          );
+          if (!targetComment) return;
+
+          // 权限规则：管理员 或 评论发布者
+          const hasPermission =
+            currentUser.role === "admin" ||
+            targetComment.author.user_id == currentUser.user_id;
+          if (hasPermission) {
+            btn.style.display = "flex";
+            btn.addEventListener("click", () => handleDeleteComment(commentId));
+          }
+        });
+      }
+
+      // 新增：执行删除帖子
+      async function handleDeletePost(postId) {
+        if (
+          !confirm(
+            "确定删除该帖子？删除后将同时删除所有关联评论，操作不可恢复！"
+          )
+        ) {
+          return;
+        }
+
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          const response = await fetch(
+            `http://localhost:3000/api/posts/${postId}`,
+            {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ operator_id: currentUser.user_id }),
+            }
+          );
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            alert(result.message);
+            // 跳转首页
+            window.location.href = "zhuye.html";
+          } else {
+            throw new Error(result.message || "删除失败");
+          }
+        } catch (error) {
+          console.error("删除帖子错误:", error);
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 新增：执行删除评论
+      async function handleDeleteComment(commentId) {
+        if (!confirm("确定删除该评论？操作不可恢复！")) {
+          return;
+        }
+
+        try {
+          loading.style.display = "block";
+          errorMessage.style.display = "none";
+
+          const response = await fetch(
+            `http://localhost:3000/api/comments/${commentId}`,
+            {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ operator_id: currentUser.user_id }),
+            }
+          );
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            alert(result.message);
+            // 重新加载评论列表
+            const commentRes = await fetch(
+              `http://localhost:3000/api/comments?postId=${postId}`
+            );
+            const commentData = await commentRes.json();
+            comments = commentData.data.comments;
+            renderCommentList(comments);
+            // 重新控制删除按钮显示
+            if (currentUser) showCommentDeleteButtons();
+          } else {
+            throw new Error(result.message || "删除失败");
+          }
+        } catch (error) {
+          console.error("删除评论错误:", error);
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 发布评论
+      commentForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const content = commentContent.value.trim();
+        const messageEl = document.getElementById("comment-message");
+
+        // 1. 前端验证：内容不能为空 + 必须登录
+        if (!content) {
+          showCommentMessage(messageEl, "评论内容不能为空", "error");
+          return;
+        }
+
+        // 2. 读取当前登录用户信息
+        const loginUser = localStorage.getItem("user");
+        if (!loginUser) {
+          showCommentMessage(messageEl, "请先登录再发布评论", "error");
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1500);
+          return;
+        }
+        const userData = JSON.parse(loginUser);
+        const currentUserId = userData.user_id;
+
+        try {
+          setLoadingState("comment-btn", true);
+          messageEl.style.display = "none";
+
+          // 3. 发送评论请求
+          const response = await fetch("http://localhost:3000/api/comments", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              post_id: postId,
+              content: content,
+              author_id: currentUserId,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // 评论成功
+            commentContent.value = "";
+            showCommentMessage(messageEl, "评论发布成功", "success", 3000);
+
+            // 重新加载评论列表
+            const commentRes = await fetch(
+              `http://localhost:3000/api/comments?postId=${postId}`
+            );
+            const commentData = await commentRes.json();
+            comments = commentData.data.comments;
+            renderCommentList(comments);
+            // 重新控制删除按钮显示
+            if (currentUser) showCommentDeleteButtons();
+          } else {
+            throw new Error(result.message || "评论发布失败");
+          }
+        } catch (error) {
+          console.error("发布评论错误:", error);
+          showCommentMessage(messageEl, error.message, "error", 5000);
+        } finally {
+          setLoadingState("comment-btn", false);
+        }
+      });
+
+      // 评论按钮加载状态控制
+      function setLoadingState(btnId, isLoading) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+
+        const btnText = btn.querySelector(".btn-text");
+        const loadingIcon = btn.querySelector(".loading");
+
+        btn.disabled = isLoading;
+        if (btnText) btnText.style.display = isLoading ? "none" : "inline";
+        if (loadingIcon)
+          loadingIcon.style.display = isLoading ? "inline-block" : "none";
+      }
+
+      // 新增：评论专用消息提示
+      function showCommentMessage(element, text, type, duration = 3000) {
+        element.textContent = text;
+        element.className = "comment-message";
+        element.classList.add(
+          type === "error" ? "comment-error" : "comment-success"
+        );
+        element.style.display = "block";
+
+        setTimeout(() => {
+          element.style.display = "none";
+        }, duration);
+      }
+
+      // 初始化页面
+      if (postId) {
+        initPage();
+      }
+    </script>
+  </body>
+</html>

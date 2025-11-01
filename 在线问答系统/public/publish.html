@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>在线问答系统 - 发布问题</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --text-color: #333;
+        --danger: #e63946;
+        --success: #4cc9f0;
+        --white: #fff;
+        --gray-light: #f5f5f5;
+        --gray: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #4361ee 0%, #3f37c9 50%);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 20px 0;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        max-width: 80px;
+        height: auto;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      /* 登录状态导航样式 */
+      .auth-section {
+        display: flex;
+        align-items: center;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+      }
+
+      .logout-btn {
+        margin-left: 10px;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        background-color: var(--danger);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .logout-btn:hover {
+        background-color: #d62828;
+      }
+
+      .guest-links {
+        display: flex;
+        gap: 10px;
+      }
+
+      .guest-links a {
+        color: var(--white);
+        background-color: var(--primary-color);
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+
+      .guest-links a:hover {
+        background-color: var(--secondary-color);
+      }
+
+      main {
+        flex: 1;
+        padding: 40px 0;
+      }
+
+      .publish-container {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 30px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .publish-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      .form-input,
+      .form-textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+        font-size: 16px;
+        font-family: inherit;
+        transition: border-color 0.3s;
+      }
+
+      .form-input:focus,
+      .form-textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
+      }
+
+      .form-textarea {
+        min-height: 200px;
+        resize: vertical;
+        line-height: 1.8;
+      }
+
+      /* 删除取消按钮，仅保留发布按钮容器 */
+      .publish-btn-wrap {
+        margin-top: 30px;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: var(--white);
+        width: 100%;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .form-message {
+        margin-top: 15px;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        line-height: 1.5;
+        display: none;
+      }
+
+      .error-message {
+        background-color: rgba(230, 57, 70, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(230, 57, 70, 0.2);
+      }
+
+      .success-message {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(76, 201, 240, 0.2);
+      }
+
+      /* 加载状态 */
+      .loading {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .btn-text {
+        display: inline-block;
+      }
+
+      footer {
+        padding: 20px 0;
+        text-align: center;
+        color: var(--white);
+        opacity: 0.8;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <a href="zhuye.html">
+          <img src="logo.png" alt="在线问答系统" class="logo" />
+        </a>
+        <div class="nav-links">
+          <a href="zhuye.html"><i class="fas fa-home"></i> 首页</a>
+          <a href="publish.html" class="active"
+            ><i class="fas fa-pen"></i> 发布问题</a
+          >
+          <a href="profile.html"><i class="fas fa-user"></i> 个人中心</a>
+        </div>
+        <div class="auth-section" id="auth-section">
+          <!-- 未登录状态 -->
+          <div class="guest-links" id="guest-links">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> 登录</a>
+            <a href="register.html"><i class="fas fa-user-plus"></i> 注册</a>
+          </div>
+          <!-- 已登录状态 -->
+          <div class="user-info" id="user-links" style="display: none">
+            <div class="user-avatar" id="user-avatar"></div>
+            <span id="username-display"></span>
+            <button class="logout-btn" id="logout-btn">退出</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="publish-container">
+          <h1 class="publish-title">
+            <i class="fas fa-pencil-alt"></i> 发布问题
+          </h1>
+
+          <form id="publishForm">
+            <div class="form-group">
+              <label for="postTitle" class="form-label">问题标题</label>
+              <input
+                type="text"
+                id="postTitle"
+                class="form-input"
+                placeholder="请简要描述你的问题"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="postContent" class="form-label">问题详情</label>
+              <textarea
+                id="postContent"
+                class="form-textarea"
+                placeholder="请详细描述你的问题"
+                required
+              ></textarea>
+            </div>
+
+            <!-- 删除取消按钮，仅保留发布按钮 -->
+            <div class="publish-btn-wrap">
+              <button type="submit" class="btn btn-primary" id="publishBtn">
+                <span class="btn-text">发布问题</span>
+                <span
+                  class="loading"
+                  id="publishLoading"
+                  style="display: none"
+                ></span>
+              </button>
+            </div>
+
+            <div class="form-message" id="publishMessage"></div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>© 2025 在线问答系统 - 版权所有</p>
+      </div>
+    </footer>
+
+    <script>
+      // 页面加载时检查登录状态
+      window.addEventListener("load", () => {
+        const user = localStorage.getItem("user");
+        const guestLinks = document.getElementById("guest-links");
+        const userLinks = document.getElementById("user-links");
+        const userAvatar = document.getElementById("user-avatar");
+        const usernameDisplay = document.getElementById("username-display");
+
+        // 未登录时强制跳转登录页
+        if (!user) {
+          showMessage(
+            document.getElementById("publishMessage"),
+            "请先登录才能发布问题",
+            "error",
+            2000
+          );
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+          return;
+        }
+
+        // 已登录状态显示用户信息
+        const userData = JSON.parse(user);
+        guestLinks.style.display = "none";
+        userLinks.style.display = "flex";
+        userAvatar.textContent = userData.username.charAt(0);
+        usernameDisplay.textContent = userData.username;
+
+        // 退出登录功能
+        document.getElementById("logout-btn").addEventListener("click", () => {
+          localStorage.removeItem("user");
+          window.location.href = "login.html";
+        });
+      });
+
+      // 发布问题功能
+      document
+        .getElementById("publishForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const title = document.getElementById("postTitle").value.trim();
+          const content = document.getElementById("postContent").value.trim();
+          const messageEl = document.getElementById("publishMessage");
+          const user = JSON.parse(localStorage.getItem("user"));
+
+          // 前端验证
+          if (!title) {
+            showMessage(messageEl, "问题标题不能为空", "error");
+            return;
+          }
+          if (title.length > 200) {
+            showMessage(messageEl, "标题长度不能超过200字", "error");
+            return;
+          }
+          if (!content) {
+            showMessage(messageEl, "问题详情不能为空", "error");
+            return;
+          }
+          if (content.length < 10) {
+            showMessage(messageEl, "问题详情请至少输入10个字符", "error");
+            return;
+          }
+
+          // 显示加载状态
+          setLoadingState("publishBtn", true);
+
+          try {
+            // 发送发布请求
+            const response = await fetch("http://localhost:3000/api/posts", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title: title,
+                content: content,
+                author_id: user.user_id, // 关联当前登录用户
+              }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              showMessage(
+                messageEl,
+                "问题发布成功，即将返回首页...",
+                "success",
+                2000
+              );
+              // 跳转首页
+              setTimeout(() => {
+                window.location.href = "zhuye.html";
+              }, 2000);
+            } else {
+              throw new Error(result.message || "发布失败，请稍后重试");
+            }
+          } catch (error) {
+            console.error("发布问题错误:", error);
+            showMessage(messageEl, error.message, "error");
+          } finally {
+            setLoadingState("publishBtn", false);
+          }
+        });
+
+      // 加载状态控制
+      function setLoadingState(btnId, isLoading) {
+        const btn = document.getElementById(btnId);
+        const btnText = btn.querySelector(".btn-text");
+        const loadingIcon = btn.querySelector(".loading");
+
+        btn.disabled = isLoading;
+        btnText.style.display = isLoading ? "none" : "inline";
+        loadingIcon.style.display = isLoading ? "inline-block" : "none";
+      }
+
+      // 消息提示函数（带自动消失）
+      function showMessage(element, text, type, duration = 3000) {
+        element.textContent = text;
+        element.className = "form-message";
+        element.classList.add(
+          type === "error" ? "error-message" : "success-message"
+        );
+        element.style.display = "block";
+
+        // 清除之前的定时器，避免冲突
+        clearTimeout(element.timer);
+        element.timer = setTimeout(() => {
+          element.style.display = "none";
+        }, duration);
+      }
+    </script>
+  </body>
+</html>

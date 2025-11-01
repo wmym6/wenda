@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>在线问答系统 - 个人中心</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --text-color: #333;
+        --danger: #e63946;
+        --success: #4cc9f0;
+        --white: #fff;
+        --gray-light: #f5f5f5;
+        --gray: #e0e0e0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #4361ee 0%, #3f37c9 50%);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      header {
+        padding: 20px 0;
+        background-color: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        max-width: 80px;
+        height: auto;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      .auth-links {
+        display: flex;
+        gap: 10px;
+      }
+
+      .auth-links a {
+        color: var(--white);
+        background-color: var(--primary-color);
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+
+      .auth-links a:hover {
+        background-color: var(--secondary-color);
+      }
+
+      main {
+        flex: 1;
+        padding: 40px 0;
+      }
+
+      .main-content {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 30px;
+      }
+
+      .profile-container {
+        display: flex;
+        gap: 30px;
+      }
+
+      .sidebar {
+        width: 250px;
+        flex-shrink: 0;
+      }
+
+      .avatar-container {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        font-weight: 600;
+        margin: 0 auto 20px;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        margin-bottom: 10px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 15px;
+        border-radius: 6px;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background-color: var(--gray-light);
+        color: var(--primary-color);
+      }
+
+      .content-area {
+        flex: 1;
+      }
+
+      .section-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--gray-light);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--gray);
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        background-color: var(--primary-color);
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .post-list,
+      .comment-list {
+        margin-bottom: 30px;
+      }
+
+      .post-card,
+      .comment-card {
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: var(--gray-light);
+        transition: transform 0.3s;
+      }
+
+      .post-card:hover,
+      .comment-card:hover {
+        transform: translateY(-3px);
+      }
+
+      .post-header,
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .post-title {
+        display: block;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary-color);
+        text-decoration: none;
+        margin-bottom: 10px;
+        transition: color 0.3s;
+      }
+
+      .post-title:hover {
+        color: var(--secondary-color);
+      }
+
+      .post-excerpt,
+      .comment-content {
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 0;
+        color: #666;
+      }
+
+      .empty-state i {
+        font-size: 40px;
+        margin-bottom: 15px;
+        color: var(--gray);
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .message {
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .error-message {
+        background-color: rgba(230, 57, 70, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(230, 57, 70, 0.2);
+      }
+
+      .success-message {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success);
+        border: 1px solid rgba(76, 201, 240, 0.2);
+      }
+
+      .delete-btn {
+        padding: 4px 8px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--danger);
+        color: var(--white);
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: background-color 0.3s;
+      }
+
+      .delete-btn:hover {
+        background-color: #d62828;
+      }
+
+      .content-section {
+        display: none;
+      }
+
+      .content-section.active {
+        display: block;
+      }
+
+      .form-actions {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <a href="zhuye.html">
+          <img src="logo.png" alt="在线问答系统" class="logo" />
+        </a>
+        <div class="nav-links">
+          <a href="zhuye.html"><i class="fas fa-home"></i> 首页</a>
+          <a href="publish.html"><i class="fas fa-pen"></i> 发布问题</a>
+          <a href="profile.html" class="active"
+            ><i class="fas fa-user"></i> 个人中心</a
+          >
+        </div>
+        <div id="auth-section">
+          <div class="auth-links" id="guest-links">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> 登录</a>
+            <a href="register.html"><i class="fas fa-user-plus"></i> 注册</a>
+          </div>
+          <div class="user-info" id="user-links" style="display: none">
+            <div
+              class="user-avatar"
+              style="
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: var(--primary-color);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+              "
+            >
+              <!-- 用户名首字母 -->
+            </div>
+            <span style="margin-left: 10px; font-weight: 500">
+              <!-- 用户名 -->
+            </span>
+            <button
+              id="logout-btn"
+              style="
+                margin-left: 10px;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                background-color: var(--danger);
+                color: white;
+                cursor: pointer;
+              "
+            >
+              退出
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="main-content">
+          <div class="profile-container">
+            <div class="sidebar">
+              <div class="avatar-container" id="userAvatar">
+                <!-- 用户名首字母 -->
+              </div>
+              <ul class="nav-menu">
+                <li class="nav-item">
+                  <a
+                    href="#edit-name"
+                    class="nav-link active"
+                    data-section="edit-name-section"
+                  >
+                    <i class="fas fa-user-edit"></i> 修改名称
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="#edit-password"
+                    class="nav-link"
+                    data-section="edit-password-section"
+                  >
+                    <i class="fas fa-key"></i> 修改密码
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="#my-posts"
+                    class="nav-link"
+                    data-section="my-posts-section"
+                  >
+                    <i class="fas fa-file-alt"></i> 我的帖子
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="#my-comments"
+                    class="nav-link"
+                    data-section="my-comments-section"
+                  >
+                    <i class="fas fa-comments"></i> 我的评论
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="content-area">
+              <!-- 改名区域 -->
+              <div id="edit-name-section" class="content-section active">
+                <h2 class="section-title">修改用户名</h2>
+                <div class="message error-message" id="nameError"></div>
+                <div class="message success-message" id="nameSuccess"></div>
+                <form id="editNameForm">
+                  <div class="form-group">
+                    <label for="newUsername" class="form-label">新用户名</label>
+                    <input
+                      type="text"
+                      id="newUsername"
+                      class="form-input"
+                      placeholder="请输入新用户名"
+                      required
+                    />
+                  </div>
+                  <div class="form-actions">
+                    <button type="submit" class="btn">
+                      <span class="btn-text">保存修改</span>
+                      <span class="loading" style="display: none"></span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- 改密码区域 -->
+              <div id="edit-password-section" class="content-section">
+                <h2 class="section-title">修改密码</h2>
+                <div class="message error-message" id="passwordError"></div>
+                <div class="message success-message" id="passwordSuccess"></div>
+                <form id="editPasswordForm">
+                  <div class="form-group">
+                    <label for="oldPassword" class="form-label">原密码</label>
+                    <input
+                      type="password"
+                      id="oldPassword"
+                      class="form-input"
+                      placeholder="请输入原密码"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword" class="form-label">新密码</label>
+                    <input
+                      type="password"
+                      id="newPassword"
+                      class="form-input"
+                      placeholder="请输入新密码"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmPassword" class="form-label"
+                      >确认新密码</label
+                    >
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      class="form-input"
+                      placeholder="请再次输入新密码"
+                      required
+                    />
+                  </div>
+                  <div class="form-actions">
+                    <button type="submit" class="btn">
+                      <span class="btn-text">保存修改</span>
+                      <span class="loading" style="display: none"></span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- 发过的帖子区域 -->
+              <div id="my-posts-section" class="content-section">
+                <h2 class="section-title">我的帖子</h2>
+                <div class="loading" id="postsLoading"></div>
+                <div class="message error-message" id="postsError"></div>
+                <div class="post-list" id="myPostsList">
+                  <!-- 帖子列表将通过JavaScript动态生成 -->
+                </div>
+              </div>
+
+              <!-- 发过的评论区域 -->
+              <div id="my-comments-section" class="content-section">
+                <h2 class="section-title">我的评论</h2>
+                <div class="loading" id="commentsLoading"></div>
+                <div class="message error-message" id="commentsError"></div>
+                <div class="comment-list" id="myCommentsList">
+                  <!-- 评论列表将通过JavaScript动态生成 -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // 全局变量
+      let currentUser = null;
+      const apiBaseUrl = "http://localhost:3000/api"; // 后端接口基础地址
+
+      // DOM元素
+      const userAvatar = document.getElementById("userAvatar");
+      const guestLinks = document.getElementById("guest-links");
+      const userLinks = document.getElementById("user-links");
+      const userNameEl = userLinks.querySelector("span");
+      const userAvatarEl = userLinks.querySelector(".user-avatar");
+      const logoutBtn = document.getElementById("logout-btn");
+      const navLinks = document.querySelectorAll(".nav-link");
+      const contentSections = document.querySelectorAll(".content-section");
+
+      // 初始化页面
+      async function initPage() {
+        // 检查登录状态
+        const userStr = localStorage.getItem("user");
+        if (!userStr) {
+          alert("请先登录");
+          window.location.href = "login.html";
+          return;
+        }
+
+        currentUser = JSON.parse(userStr);
+        // 验证用户信息有效性
+        if (!currentUser || !currentUser.user_id || !currentUser.username) {
+          alert("登录信息无效，请重新登录");
+          localStorage.removeItem("user");
+          window.location.href = "login.html";
+          return;
+        }
+
+        updateUserInfoDisplay();
+        bindEvents();
+
+        // 加载用户内容
+        await Promise.all([loadMyPosts(), loadMyComments()]);
+      }
+
+      // 更新用户信息显示
+      function updateUserInfoDisplay() {
+        const firstChar = currentUser.username.charAt(0).toUpperCase();
+        userAvatar.textContent = firstChar;
+        userAvatarEl.textContent = firstChar;
+        userNameEl.textContent = currentUser.username;
+        document.getElementById("newUsername").value = currentUser.username;
+
+        // 切换登录状态显示
+        guestLinks.style.display = "none";
+        userLinks.style.display = "flex";
+        userLinks.style.alignItems = "center";
+      }
+
+      // 绑定交互事件
+      function bindEvents() {
+        // 导航切换
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            navLinks.forEach((l) => l.classList.remove("active"));
+            contentSections.forEach((s) => s.classList.remove("active"));
+            link.classList.add("active");
+            const targetSection = link.getAttribute("data-section");
+            document.getElementById(targetSection).classList.add("active");
+          });
+        });
+
+        // 退出登录
+        logoutBtn.addEventListener("click", () => {
+          if (confirm("确定要退出登录吗？")) {
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+          }
+        });
+
+        // 表单提交事件
+        document
+          .getElementById("editNameForm")
+          .addEventListener("submit", handleEditName);
+        document
+          .getElementById("editPasswordForm")
+          .addEventListener("submit", handleEditPassword);
+      }
+
+      // 加载当前用户的帖子
+      async function loadMyPosts() {
+        const postsList = document.getElementById("myPostsList");
+        const loading = document.getElementById("postsLoading");
+        const errorEl = document.getElementById("postsError");
+
+        loading.style.display = "block";
+        errorEl.style.display = "none";
+        postsList.innerHTML = "加载中...";
+
+        try {
+          // 请求个人中心专用接口
+          const response = await fetch(`${apiBaseUrl}/user/posts`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-User-Id": currentUser.user_id, // 传递当前用户ID
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`接口请求失败: ${response.status}`);
+          }
+
+          const result = await response.json();
+          if (!result.success) {
+            throw new Error(result.message || "获取帖子失败");
+          }
+
+          const posts = result.data?.posts || [];
+          // 按时间倒序排序
+          posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+          if (posts.length === 0) {
+            postsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-file-alt"></i>
+                            <p>你还没有发布过任何帖子</p>
+                            <a href="publish.html" class="btn" style="margin-top: 15px;">
+                                <i class="fas fa-pen"></i> 发布第一篇帖子
+                            </a>
+                        </div>
+                    `;
+            return;
+          }
+
+          // 渲染帖子列表
+          postsList.innerHTML = "";
+          posts.forEach((post) => {
+            const postCard = document.createElement("div");
+            postCard.className = "post-card";
+            postCard.innerHTML = `
+                        <div class="post-header">
+                            <div class="post-date">
+                                <i class="fas fa-clock"></i> ${formatTime(
+                                  post.created_at
+                                )}
+                            </div>
+                            <button class="delete-btn" data-postid="${
+                              post.post_id
+                            }">
+                                <i class="fas fa-trash-alt"></i> 删除
+                            </button>
+                        </div>
+                        <a href="post-detail.html?postId=${
+                          post.post_id
+                        }" class="post-title">
+                            ${escapeHtml(post.title)}
+                        </a>
+                        <div class="post-excerpt">
+                            ${escapeHtml(truncateText(post.content, 150))}
+                        </div>
+                    `;
+            postsList.appendChild(postCard);
+
+            // 绑定删除事件
+            postCard
+              .querySelector(".delete-btn")
+              .addEventListener("click", () => {
+                deletePost(post.post_id);
+              });
+          });
+        } catch (error) {
+          console.error("加载帖子错误:", error);
+          postsList.innerHTML = "";
+          errorEl.textContent = `加载失败: ${error.message}`;
+          errorEl.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 加载当前用户的评论
+      async function loadMyComments() {
+        const commentsList = document.getElementById("myCommentsList");
+        const loading = document.getElementById("commentsLoading");
+        const errorEl = document.getElementById("commentsError");
+
+        loading.style.display = "block";
+        errorEl.style.display = "none";
+        commentsList.innerHTML = "加载中...";
+
+        try {
+          // 请求个人中心专用接口
+          const response = await fetch(`${apiBaseUrl}/user/comments`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-User-Id": currentUser.user_id, // 传递当前用户ID
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`接口请求失败: ${response.status}`);
+          }
+
+          const result = await response.json();
+          if (!result.success) {
+            throw new Error(result.message || "获取评论失败");
+          }
+
+          const comments = result.data?.comments || [];
+          // 按时间倒序排序
+          comments.sort(
+            (a, b) => new Date(b.created_at) - new Date(a.created_at)
+          );
+
+          if (comments.length === 0) {
+            commentsList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-comments"></i>
+                            <p>你还没有发布过任何评论</p>
+                        </div>
+                    `;
+            return;
+          }
+
+          // 渲染评论列表
+          commentsList.innerHTML = "";
+          comments.forEach((comment) => {
+            const commentCard = document.createElement("div");
+            commentCard.className = "comment-card";
+            commentCard.innerHTML = `
+                        <div class="comment-header">
+                            <div class="post-date">
+                                <i class="fas fa-clock"></i> ${formatTime(
+                                  comment.created_at
+                                )}
+                            </div>
+                            <button class="delete-btn" data-commentid="${
+                              comment.comment_id
+                            }">
+                                <i class="fas fa-trash-alt"></i> 删除
+                            </button>
+                        </div>
+                        <div class="comment-content">
+                            ${escapeHtml(comment.content)}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 14px;">
+                            <i class="fas fa-link"></i> 来自帖子: 
+                            <a href="post-detail.html?postId=${
+                              comment.post_id
+                            }" style="color: var(--primary-color);">
+                                ${escapeHtml(comment.post_title || "查看帖子")}
+                            </a>
+                        </div>
+                    `;
+            commentsList.appendChild(commentCard);
+
+            // 绑定删除事件
+            commentCard
+              .querySelector(".delete-btn")
+              .addEventListener("click", () => {
+                deleteComment(comment.comment_id);
+              });
+          });
+        } catch (error) {
+          console.error("加载评论错误:", error);
+          commentsList.innerHTML = "";
+          errorEl.textContent = `加载失败: ${error.message}`;
+          errorEl.style.display = "block";
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+
+      // 删除帖子
+      async function deletePost(postId) {
+        if (!confirm("确定要删除这篇帖子吗？删除后不可恢复！")) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`${apiBaseUrl}/posts/${postId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ operator_id: currentUser.user_id }),
+          });
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            alert("帖子删除成功");
+            loadMyPosts(); // 重新加载
+          } else {
+            throw new Error(result.message || "删除失败");
+          }
+        } catch (error) {
+          alert(`删除失败: ${error.message}`);
+        }
+      }
+
+      // 删除评论
+      async function deleteComment(commentId) {
+        if (!confirm("确定要删除这条评论吗？删除后不可恢复！")) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`${apiBaseUrl}/comments/${commentId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ operator_id: currentUser.user_id }),
+          });
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            alert("评论删除成功");
+            loadMyComments(); // 重新加载
+          } else {
+            throw new Error(result.message || "删除失败");
+          }
+        } catch (error) {
+          alert(`删除失败: ${error.message}`);
+        }
+      }
+
+      // 修改用户名
+      async function handleEditName(e) {
+        e.preventDefault();
+        const newUsername = document.getElementById("newUsername").value.trim();
+        const errorEl = document.getElementById("nameError");
+        const successEl = document.getElementById("nameSuccess");
+        const btn = e.submitter;
+        const btnText = btn.querySelector(".btn-text");
+        const loading = btn.querySelector(".loading");
+
+        if (!newUsername) {
+          showMessage(errorEl, "用户名不能为空", "error");
+          return;
+        }
+        if (newUsername === currentUser.username) {
+          showMessage(errorEl, "新用户名与当前相同", "error");
+          return;
+        }
+
+        setLoadingState(btnText, loading, true);
+        errorEl.style.display = "none";
+        successEl.style.display = "none";
+
+        try {
+          const response = await fetch(
+            `${apiBaseUrl}/users/${currentUser.user_id}/username`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                new_username: newUsername,
+                user_id: currentUser.user_id,
+              }),
+            }
+          );
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            currentUser.username = newUsername;
+            localStorage.setItem("user", JSON.stringify(currentUser));
+            updateUserInfoDisplay();
+            showMessage(successEl, "用户名修改成功", "success");
+          } else {
+            throw new Error(result.message || "修改失败");
+          }
+        } catch (error) {
+          showMessage(errorEl, error.message, "error");
+        } finally {
+          setLoadingState(btnText, loading, false);
+        }
+      }
+
+      // 修改密码
+      async function handleEditPassword(e) {
+        e.preventDefault();
+        const oldPassword = document.getElementById("oldPassword").value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const errorEl = document.getElementById("passwordError");
+        const successEl = document.getElementById("passwordSuccess");
+        const btn = e.submitter;
+        const btnText = btn.querySelector(".btn-text");
+        const loading = btn.querySelector(".loading");
+
+        if (!oldPassword || !newPassword || !confirmPassword) {
+          showMessage(errorEl, "请填写所有字段", "error");
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          showMessage(errorEl, "两次密码不一致", "error");
+          return;
+        }
+        if (newPassword.length < 6) {
+          showMessage(errorEl, "新密码至少6位", "error");
+          return;
+        }
+
+        setLoadingState(btnText, loading, true);
+        errorEl.style.display = "none";
+        successEl.style.display = "none";
+
+        try {
+          const response = await fetch(
+            `${apiBaseUrl}/users/${currentUser.user_id}/password`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                old_password: oldPassword,
+                new_password: newPassword,
+                user_id: currentUser.user_id,
+              }),
+            }
+          );
+
+          const result = await response.json();
+          if (response.ok && result.success) {
+            e.target.reset();
+            showMessage(successEl, "密码修改成功，请重新登录", "success");
+            setTimeout(() => {
+              localStorage.removeItem("user");
+              window.location.href = "login.html";
+            }, 2000);
+          } else {
+            throw new Error(result.message || "修改失败");
+          }
+        } catch (error) {
+          showMessage(errorEl, error.message, "error");
+        } finally {
+          setLoadingState(btnText, loading, false);
+        }
+      }
+
+      // 工具函数：格式化时间
+      function formatTime(timeStr) {
+        const date = new Date(timeStr);
+        return date.toLocaleString("zh-CN", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      // 工具函数：截断文本
+      function truncateText(text, maxLength) {
+        return text.length > maxLength
+          ? text.substring(0, maxLength) + "..."
+          : text;
+      }
+
+      // 工具函数：防XSS
+      function escapeHtml(unsafe) {
+        if (!unsafe) return "";
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // 工具函数：显示消息
+      function showMessage(element, text, type) {
+        element.textContent = text;
+        element.className = `message ${type}-message`;
+        element.style.display = "block";
+        if (type === "success") {
+          setTimeout(() => (element.style.display = "none"), 3000);
+        }
+      }
+
+      // 工具函数：设置加载状态
+      function setLoadingState(textEl, loadingEl, isLoading) {
+        textEl.style.display = isLoading ? "none" : "inline";
+        loadingEl.style.display = isLoading ? "inline-block" : "none";
+      }
+
+      // 初始化
+      window.addEventListener("load", initPage);
+    </script>
+  </body>
+</html>
